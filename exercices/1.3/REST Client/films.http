@@ -1,0 +1,12 @@
+@baseUrl = http://localhost:3000
+
+### Create a film
+POST {{baseUrl}}/films
+Content-Type: application/json
+
+{
+        "title": "Nicolas l'exploratrice",
+        "duration": 69,
+        "budget": 200000,
+        "link": "https://www.imdb.com/title/tt0086250/"
+}
