@@ -36,21 +36,6 @@ router.get('/:id',(req,res) => {
     res.json(FILMS[indexOfFilmFound]);
 });
 
-/*router.get('/',(req,res,next) => {
-    const orderByDuration = 
-        req?.query['minimum-duration']? req.query['minimum-duration']: undefined;
-
-    let orderedFilm;
-
-    if(orderByDuration){
-        orderedFilm = [...FILMS].filter(film => film.duration >= orderByDuration);
-    }
-
-    console.log('GET /films');
-    res.json(orderByDuration ?? FILMS); 
-
-});*/
-
 router.get('/', (req, res, next) => {
 
     const orderByDuration = req?.query['minimum-duration']? req.query['minimum-duration']: undefined;
@@ -73,6 +58,11 @@ router.post('/', (req, res, next) => {
         const link = req?.body?.link?.length !== 0 ? req.body.link : undefined;
 
         if (!title || !duration || !budget || !link) return res.sendStatus(400); // error code '400 Bad request'
+
+        const filmFound = FILMS.find((film) => film.title === title);
+        
+        if(filmFound !== -1) return res.sendStatus(409); // error code '400 Bad request'
+
 
         const newFilm = {
             id,

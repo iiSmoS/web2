@@ -5,8 +5,10 @@ POST {{baseUrl}}/films
 Content-Type: application/json
 
 {
-        "title": "Test",
+        "title": "Furioza",
         "duration": 69,
         "budget": 200000,
         "link": "https://www.imdb.com/title/tt0086250/"
+
 }
+

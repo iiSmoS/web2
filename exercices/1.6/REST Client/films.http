@@ -1,0 +1,35 @@
+@baseUrl = http://localhost:3000
+
+### Create a film
+POST {{baseUrl}}/films
+Content-Type: application/json
+
+{
+        "title": "Keyvan l'explorateur",
+        "duration": 69,
+        "budget": 200000,
+        "link": "https://www.imdb.com/"
+
+}
+
+### Delete film identified by id
+DELETE {{baseUrl}}/films/4
+
+### Update the pizza identified by 6
+PATCH {{baseUrl}}/films/2
+Content-Type: application/json
+
+{
+        "title": "Scarface 2"
+}
+
+### update a film
+PUT {{baseUrl}}/films/1
+Content-Type: application/json
+
+{
+        "title": "Keyvan l'explorateur",
+        "duration": 69,
+        "budget": 200000,
+        "link": "https://www.imdb.com/"
+}
