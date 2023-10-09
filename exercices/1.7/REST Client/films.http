@@ -1,5 +1,13 @@
 @baseUrl = http://localhost:3000
 
+### Read all films
+GET {{baseUrl}}/films
+Content-Type: application/json
+
+### Read film by id
+GET {{baseUrl}}/films/1
+Content-Type: application/json
+
 ### Create a film
 POST {{baseUrl}}/films
 Content-Type: application/json
@@ -10,6 +18,29 @@ Content-Type: application/json
         "budget": 200000,
         "link": "https://www.imdb.com/"
 
+}
+
+### Delete film identified by id
+DELETE {{baseUrl}}/films/5
+
+### Create a film
+POST {{baseUrl}}/films
+Content-Type: application/json
+
+{
+        "title": "Keyvan l'explorateur",
+        "duration": 69,
+        "budget": 200000,
+        "link": "https://www.imdb.com/"
+
+}
+
+### Update the pizza identified by 6
+PATCH {{baseUrl}}/films/3
+Content-Type: application/json
+
+{
+        "title": "Scarface 2"
 }
 
 ### Delete film identified by id
@@ -24,7 +55,7 @@ Content-Type: application/json
 }
 
 ### update a film
-PUT {{baseUrl}}/films/1
+PUT {{baseUrl}}/films/3
 Content-Type: application/json
 
 {

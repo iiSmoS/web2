@@ -1,5 +1,8 @@
 var express = require('express');
+const { serialize, parse } = require('../utils/json');
 var router = express.Router();
+
+const jsonDbPath = __dirname + '/../data/films.json';
 
 const FILMS = [
     {
@@ -32,32 +35,39 @@ const FILMS = [
     }
 ]
 
-router.get('/:id',(req,res) => {
-    console.log(`GET /films/${req.params.id}`);
-
-    const indexOfFilmFound = FILMS.findIndex((film) => film.id == req.params.id);
-
-    if(indexOfFilmFound < 0) return res.sendStatus(404);
-
-    res.json(FILMS[indexOfFilmFound]);
-});
-
 router.get('/', (req, res, next) => {
 
     const orderByDuration = req?.query['minimum-duration']? req.query['minimum-duration']: undefined;
 
+    const films = parse(jsonDbPath,FILMS);
+
     let orderedFILMS;
+
     if(orderByDuration){
-      orderedFILMS = [...FILMS].filter(film => film.duration > orderByDuration);
+      orderedFILMS = [...films].filter(films => films.duration > orderByDuration);
     }
 
     console.log("GET /films");
-    res.json(orderedFILMS ?? FILMS);
-    
+    res.json(orderedFILMS ?? films);
+});
+
+router.get('/:id',(req,res) => {
+    console.log(`GET /films/${req.params.id}`);
+
+    const films = parse(jsonDbPath,FILMS);
+
+    const indexOfFilmFound = films.findIndex((film) => film.id == req.params.id);
+
+    if(indexOfFilmFound < 0) return res.sendStatus(404);
+
+    res.json(films[indexOfFilmFound]);
 });
 
 router.post('/', (req, res, next) => {
-        const id = (FILMS[FILMS.length - 1].id + 1);
+
+        const films = parse(jsonDbPath,FILMS);
+
+        const id = (films[films.length - 1].id + 1);
         const title = req?.body?.title?.length !== 0 ? req.body.title : undefined;
         const duration = req?.body?.duration?.length !== 0 ? req.body.duration : undefined;
         const budget = req?.body?.budget?.length !== 0 ? req.body.budget : undefined;
@@ -73,25 +83,30 @@ router.post('/', (req, res, next) => {
             link
         }
         
-        const filmFound = FILMS.find((film) => film.title === newFilm.title);
+        const filmFound = films.find((film) => film.title === newFilm.title);
         
         if(filmFound){
            return res.sendStatus(409); // error code '409 Bad request' 
         }
 
-        FILMS.push(newFilm)
+        films.push(newFilm);
+        serialize(jsonDbPath, films);
         res.json(newFilm);
 });
 
 router.delete('/:id', (req, res) => {
     console.log(`DELETE /films/${req.params.id}`);
 
-    const indexOfFilmFound = FILMS.findIndex((film) => film.id == req.params.id);
+    const films = parse(jsonDbPath,FILMS);
+
+    const indexOfFilmFound = films.findIndex((film) => film.id == req.params.id);
 
     if(indexOfFilmFound < 0) return res.sendStatus(404);
 
-    const itemsRemovedFromFilms = FILMS.splice(indexOfFilmFound, 1);
+    const itemsRemovedFromFilms = films.splice(indexOfFilmFound, 1);
     const itemRemoved = itemsRemovedFromFilms[0];
+
+    serialize(jsonDbPath, films);
 
     res.json(itemRemoved);
 });
@@ -110,21 +125,23 @@ router.patch('/:id', (req, res) => {
     if ((!title && !duration && !budget && !link) || title?.length === 0 || 
     duration?.length === 0 || budget?.length === 0 || link?.length === 0) return res.sendStatus(400);
 
+    const films = parse(jsonDbPath,FILMS);
   
-    const foundIndex = FILMS.findIndex(film => film.id == req.params.id);
+    const foundIndex = films.findIndex(film => film.id == req.params.id);
   
     if (foundIndex < 0) return res.sendStatus(404);
   
-    const updatedFilm = {...FILMS[foundIndex], ...req.body};
+    const updatedFilm = {...films[foundIndex], ...req.body};
   
-    FILMS[foundIndex] = updatedFilm;
+    films[foundIndex] = updatedFilm;
+
+    serialize(jsonDbPath, films);
   
     res.json(updatedFilm);
 });
 
 router.put('/:id', (req, res) => {
     console.log(`PUT /films/${req.params.id}`);
-
     const id = req.params.id;
     const title = req?.body?.title;
     const duration = req?.body?.duration;
@@ -136,7 +153,9 @@ router.put('/:id', (req, res) => {
     if ((!title && !duration && !budget && !link) || title?.length === 0 || 
     duration?.length === 0 || budget?.length === 0 || link?.length === 0) return res.sendStatus(400);
 
-    if(id > FILMS.length){
+    const films = parse(jsonDbPath,FILMS);
+
+    if(id > films.length){
 
         const newFilm = {
             id,
@@ -146,24 +165,26 @@ router.put('/:id', (req, res) => {
             link
         };
 
-        const filmFound = FILMS.find((film) => film.title === newFilm.title);
+        const filmFound = films.find((film) => film.title === newFilm.title);
 
         if(filmFound){
            return res.sendStatus(409); // error code '409 Bad request' 
         };
 
-        FILMS.push(newFilm);
+        films.push(newFilm);
         return res.json(newFilm);
     };
 
-    const foundIndex = FILMS.findIndex(film => film.id == req.params.id);
+    const foundIndex = films.findIndex(film => film.id == req.params.id);
 
     if (foundIndex < 0) return res.sendStatus(404);
 
-    const updatedFilm = {...FILMS[foundIndex],...req.body};
-    FILMS[foundIndex] = updatedFilm;
-    res.json(updatedFilm);
+    const updatedFilm = {...films[foundIndex],...req.body};
+    films[foundIndex] = updatedFilm;
 
+    serialize(jsonDbPath, films);
+
+    res.json(updatedFilm);
 });
   
 
