@@ -6,6 +6,7 @@ const resultText = document.getElementById("resultatText");
 formulaire.addEventListener("submit", function (e) {
     e.preventDefault(); // Empêche le rechargement de la page
 
+    
     resultText.textContent = souhaitInput.value;
         
 
