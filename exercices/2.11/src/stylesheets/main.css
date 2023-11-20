@@ -1,0 +1,50 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.background-image {
+    background-image: url("../img/background.jpg");
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+}
+
+.title h1{
+    padding-top: 50px;
+    color: yellow;
+}
+
+
+.container{
+    display:flex;
+    text-align: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.container h1{
+    padding-top: 30px;
+    color: yellow;
+}
+
+.container p{
+    color: rgb(166, 0, 255);
+    margin-top: 20px;
+}
+
+.film{
+    margin: 0 100px;
+}
+
+
+img{
+    height: 350px;
+    width: 250px;
+    border: 10px solid yellow;
+    border-radius: 30px;
+}
+

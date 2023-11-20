@@ -26,6 +26,11 @@ body, html {
     margin-top: 100px;
 }
 
+.container h1{
+    padding-top: 30px;
+    color: yellow;
+}
+
 .container p{
     color: rgb(166, 0, 255);
     margin-top: 20px;
